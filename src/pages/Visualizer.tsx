@@ -10,18 +10,15 @@ const Visualizer = () => {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header */}
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse-glow" />
-          <h1 className="text-sm font-semibold tracking-widest uppercase">
+          <span className="text-sm font-semibold tracking-widest uppercase">
             <span className="text-primary glow-text">WASM</span>
             <span className="text-muted-foreground">::</span>
             <span>SortViz</span>
-          </h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link to="/" className="text-xs text-muted-foreground hover:text-foreground transition-colors">← Docs</Link>
-          <span className="text-xs text-muted-foreground hidden sm:block">C++ → WebAssembly → Browser</span>
-        </div>
+          </span>
+        </Link>
+        <span className="text-xs text-muted-foreground hidden sm:block">C++ → WebAssembly → Browser</span>
       </header>
 
       {/* Main Content */}

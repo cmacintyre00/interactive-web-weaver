@@ -48,10 +48,10 @@
     /* Custom tokens */
     --glow: 168 100% 50%;
     --surface: 220 18% 12%;
-    --bar-default: 168 80% 45%;
+    --bar-default: 220 15% 40%;
     --bar-comparing: 45 100% 60%;
     --bar-swapping: 0 80% 60%;
-    --bar-sorted: 168 100% 50%;
+    --bar-sorted: 150 100% 45%;
   }
 }
 
