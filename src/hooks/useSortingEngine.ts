@@ -1,3 +1,7 @@
+// Code written by Connor MacIntyre
+// Main hook that ties everything together: manages array state, runs the sorting
+// animation loop step by step, and tracks comparisons/swaps in real time.
+
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { WasmBridge, type AlgorithmId, type SortStep } from '@/wasm/WasmBridge';
 
@@ -7,7 +11,7 @@ export function useSortingEngine() {
   const [isRunning, setIsRunning] = useState(false);
   const [isSorted, setIsSorted] = useState(false);
   const [algorithm, setAlgorithm] = useState<AlgorithmId>('bubble');
-  const [speed, setSpeed] = useState(50); // 1-100
+  const [speed, setSpeed] = useState(50);
   const [arraySize, setArraySize] = useState(40);
   const [comparisons, setComparisons] = useState(0);
   const [swaps, setSwaps] = useState(0);

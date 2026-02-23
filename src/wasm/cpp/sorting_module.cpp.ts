@@ -1,16 +1,19 @@
+// Code written by Connor MacIntyre
+//
+// Reference C++ source for the sorting algorithms. This is what you'd compile
+// with Emscripten to get the .wasm binary:
+//   emcc sorting_module.cpp -o sorting.js \
+//     -s EXPORTED_FUNCTIONS="['_bubbleSort','_generateArray']" -s MODULARIZE=1
+//
+// The actual runtime logic lives in WasmBridge.ts as TypeScript generators.
+
 /*
- * Reference C++ Source — sorting_module.cpp
- * 
- * This file shows the C++ code that would be compiled with Emscripten:
- *   emcc sorting_module.cpp -o sorting.js -s EXPORTED_FUNCTIONS="['_bubbleSort','_generateArray']" -s MODULARIZE=1
- *
  * #include <emscripten/bind.h>
  * #include <vector>
  * #include <algorithm>
  * #include <cstdlib>
- * 
+ *
  * extern "C" {
- *   // Generate random array in WASM linear memory
  *   int* generateArray(int size) {
  *     static std::vector<int> arr;
  *     arr.resize(size);
@@ -19,20 +22,19 @@
  *     }
  *     return arr.data();
  *   }
- * 
- *   // Bubble sort with step callback for visualization
+ *
  *   void bubbleSort(int* arr, int size, void (*onStep)(int, int, int)) {
  *     for (int i = size - 1; i > 0; i--) {
  *       for (int j = 0; j < i; j++) {
- *         onStep(j, j + 1, 0); // comparing
+ *         onStep(j, j + 1, 0);
  *         if (arr[j] > arr[j + 1]) {
  *           std::swap(arr[j], arr[j + 1]);
- *           onStep(j, j + 1, 1); // swapping
+ *           onStep(j, j + 1, 1);
  *         }
  *       }
  *     }
  *   }
- * 
+ *
  *   void selectionSort(int* arr, int size, void (*onStep)(int, int, int)) {
  *     for (int i = 0; i < size; i++) {
  *       int minIdx = i;
@@ -46,7 +48,7 @@
  *       }
  *     }
  *   }
- * 
+ *
  *   void quickSort(int* arr, int lo, int hi, void (*onStep)(int, int, int)) {
  *     if (lo < hi) {
  *       int pivot = arr[hi], i = lo;
@@ -65,7 +67,7 @@
  *     }
  *   }
  * }
- * 
+ *
  * EMSCRIPTEN_BINDINGS(sorting_module) {
  *   emscripten::function("generateArray", &generateArray, emscripten::allow_raw_pointers());
  *   emscripten::function("bubbleSort", &bubbleSort, emscripten::allow_raw_pointers());
@@ -74,6 +76,4 @@
  * }
  */
 
-// This file is for reference only — it documents the C++ source
-// that would be compiled to WebAssembly using Emscripten.
 export {};

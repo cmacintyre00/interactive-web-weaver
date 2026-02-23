@@ -1,4 +1,7 @@
+// Code written by Connor MacIntyre
+
 import { Link } from 'react-router-dom';
+import Footer from '@/components/Footer';
 
 const sections = [
   {
@@ -82,11 +85,19 @@ const outputGuide = [
   },
 ];
 
+const steps = [
+  { step: '01', title: 'Choose an Algorithm', desc: 'Select one of the four sorting algorithms from the control panel on the right side. Each button shows the algorithm name — click to select.' },
+  { step: '02', title: 'Adjust Parameters', desc: 'Use the Speed slider (1–100%) to control animation speed. Use the Array Size slider (10–120) to set how many bars to sort. The array regenerates automatically when you change the size.' },
+  { step: '03', title: 'Execute the Sort', desc: 'Click the "▶ Execute" button to start the visualization. The bars will animate in real-time showing each comparison and swap. You can click "■ Halt" at any time to pause.' },
+  { step: '04', title: 'Observe the Output', desc: 'Watch the bar colors change as the algorithm runs. The terminal log at the bottom shows execution status. Stats (comparisons and swaps) update live.' },
+  { step: '05', title: 'Reset & Repeat', desc: 'Click "↻ Reset" to generate a new random array and try again with a different algorithm or parameters.' },
+];
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse-glow" />
           <h1 className="text-sm font-semibold tracking-widest uppercase">
@@ -104,189 +115,225 @@ const Index = () => {
       </header>
 
       {/* Hero */}
-      <section className="px-6 py-16 max-w-4xl mx-auto text-center">
-        <div className="inline-block px-3 py-1 rounded border border-border bg-secondary/30 text-xs text-muted-foreground uppercase tracking-widest mb-6">
-          C++ → Emscripten → WebAssembly → Browser
-        </div>
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          Interactive Sorting Algorithm
-          <br />
-          <span className="text-primary glow-text">Visualizer</span>
-        </h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Watch sorting algorithms execute step-by-step in real-time. Understand how Bubble Sort, Selection Sort, Quick Sort, and Insertion Sort work — powered by a WebAssembly architecture running entirely in your browser.
-        </p>
-        <div className="mt-8 flex justify-center gap-3">
-          <Link
-            to="/visualizer"
-            className="px-6 py-3 rounded bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity glow-border"
-          >
-            ▶ Start Visualizing
-          </Link>
-          <a
-            href="#how-to-use"
-            className="px-6 py-3 rounded border border-border text-sm font-semibold uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-muted-foreground transition-colors"
-          >
-            ↓ Learn More
-          </a>
+      <section className="relative px-6 py-24 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto text-center">
+          <div className="inline-block px-3 py-1 rounded border border-border bg-secondary/30 text-xs text-muted-foreground uppercase tracking-widest mb-6">
+            C++ → Emscripten → WebAssembly → Browser
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+            Interactive Sorting Algorithm
+            <br />
+            <span className="text-primary glow-text">Visualizer</span>
+          </h2>
+          <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed text-base lg:text-lg">
+            Watch sorting algorithms execute step-by-step in real-time. Understand how Bubble Sort, Selection Sort, Quick Sort, and Insertion Sort work — powered by a WebAssembly architecture running entirely in your browser.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-3">
+            <Link
+              to="/visualizer"
+              className="px-8 py-4 rounded bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity glow-border"
+            >
+              ▶ Start Visualizing
+            </Link>
+            <a
+              href="#purpose"
+              className="px-8 py-4 rounded border border-border text-sm font-semibold uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-muted-foreground transition-colors"
+            >
+              ↓ Learn More
+            </a>
+          </div>
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-6 pb-20 space-y-16">
-        {/* Purpose & Architecture */}
-        {sections.map((section) => (
-          <section key={section.tag}>
-            <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">{section.tag}</div>
-            <h3 className="text-xl font-bold mb-4">{section.title}</h3>
-            <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm">{section.content}</p>
-            {section.layers && (
-              <div className="mt-6 space-y-3">
-                {section.layers.map((layer) => (
-                  <div key={layer.label} className="p-4 bg-card border border-border rounded-lg">
-                    <div className={`text-sm font-semibold mb-1 ${layer.color}`}>{layer.label}</div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{layer.desc}</p>
+      {/* Purpose section — asymmetric two-column */}
+      <section id="purpose" className="px-6 py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-2">
+              <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">{sections[0].tag}</div>
+              <h3 className="text-2xl lg:text-3xl font-bold mb-2">{sections[0].title}</h3>
+            </div>
+            <div className="lg:col-span-3">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm lg:text-base">{sections[0].content}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Architecture section */}
+      <section className="px-6 py-20 lg:py-24 bg-card/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">{sections[1].tag}</div>
+          <h3 className="text-2xl lg:text-3xl font-bold mb-4">{sections[1].title}</h3>
+          <p className="text-muted-foreground leading-relaxed text-sm lg:text-base mb-8">{sections[1].content}</p>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {sections[1].layers!.map((layer, i) => (
+              <div key={layer.label} className="group relative p-6 bg-card border border-border rounded-lg hover:border-primary/30 transition-colors">
+                <div className="text-xs text-muted-foreground mb-3">0{i + 1}</div>
+                <div className={`text-base font-semibold mb-3 ${layer.color}`}>{layer.label}</div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{layer.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Data flow diagram */}
+          <div className="mt-6 p-5 bg-secondary/20 border border-border rounded-lg text-center text-xs text-muted-foreground flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            <span className="text-primary font-semibold">C++ Source</span>
+            <span>→</span>
+            <span className="text-accent font-semibold">Emscripten</span>
+            <span>→</span>
+            <span className="text-primary font-semibold">.wasm Binary</span>
+            <span>→</span>
+            <span className="text-accent font-semibold">WasmBridge.ts</span>
+            <span>→</span>
+            <span className="text-bar-comparing font-semibold">React UI</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Algorithm cards — full-width grid */}
+      <section className="px-6 py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 03. algorithms</div>
+          <h3 className="text-2xl lg:text-3xl font-bold mb-8">Available Sorting Algorithms</h3>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            {algorithms.map((algo) => (
+              <div key={algo.name} className="p-6 bg-card border border-border rounded-lg flex flex-col hover:border-primary/30 transition-colors">
+                <span className="text-base font-semibold text-primary mb-1">{algo.name}</span>
+                <div className="flex gap-4 text-xs mb-3">
+                  <span className="text-bar-comparing">Time: {algo.time}</span>
+                  <span className="text-accent">Space: {algo.space}</span>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{algo.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Usage instructions — numbered steps in a wider layout */}
+      <section id="how-to-use" className="px-6 py-20 lg:py-24 bg-card/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 04. how to use</div>
+          <h3 className="text-2xl lg:text-3xl font-bold mb-8">How to Use the Visualizer</h3>
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {steps.map((item) => (
+              <div key={item.step} className="flex gap-4 p-6 bg-card border border-border rounded-lg hover:border-primary/30 transition-colors">
+                <div className="text-primary font-bold text-2xl opacity-30 shrink-0">{item.step}</div>
+                <div>
+                  <div className="text-sm font-semibold mb-2">{item.title}</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Color guide and output explanation — two-column layout */}
+      <section className="px-6 py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 05. reading the output</div>
+          <h3 className="text-2xl lg:text-3xl font-bold mb-8">What the Output Means</h3>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left column — bar colors */}
+            <div>
+              <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider text-muted-foreground">Bar Colors</h4>
+              <div className="space-y-3">
+                {outputGuide.map((item) => (
+                  <div key={item.label} className="flex items-start gap-3 p-4 bg-card border border-border rounded-lg">
+                    <span className={`w-4 h-4 rounded-sm mt-0.5 shrink-0 ${item.color}`} />
+                    <div>
+                      <div className="text-sm font-semibold">{item.label}</div>
+                      <p className="text-sm text-muted-foreground">{item.meaning}</p>
+                    </div>
                   </div>
                 ))}
-                {/* Flow diagram */}
-                <div className="p-4 bg-secondary/20 border border-border rounded-lg text-center text-xs text-muted-foreground">
-                  <span className="text-primary font-semibold">C++ Source</span>
-                  <span className="mx-2">→</span>
-                  <span className="text-accent font-semibold">Emscripten</span>
-                  <span className="mx-2">→</span>
-                  <span className="text-primary font-semibold">.wasm Binary</span>
-                  <span className="mx-2">→</span>
-                  <span className="text-accent font-semibold">WasmBridge.ts</span>
-                  <span className="mx-2">→</span>
-                  <span className="text-bar-comparing font-semibold">React UI</span>
-                </div>
               </div>
-            )}
-          </section>
-        ))}
-
-        {/* Algorithms */}
-        <section>
-          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 03. algorithms</div>
-          <h3 className="text-xl font-bold mb-4">Available Sorting Algorithms</h3>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {algorithms.map((algo) => (
-              <div key={algo.name} className="p-4 bg-card border border-border rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-primary">{algo.name}</span>
-                  <div className="flex gap-3 text-xs">
-                    <span className="text-bar-comparing">Time: {algo.time}</span>
-                    <span className="text-accent">Space: {algo.space}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">{algo.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* How to Use */}
-        <section id="how-to-use">
-          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 04. how to use</div>
-          <h3 className="text-xl font-bold mb-4">How to Use the Visualizer</h3>
-          <div className="space-y-3">
-            {[
-              { step: '01', title: 'Choose an Algorithm', desc: 'Select one of the four sorting algorithms from the control panel on the right side. Each button shows the algorithm name — click to select.' },
-              { step: '02', title: 'Adjust Parameters', desc: 'Use the Speed slider (1–100%) to control animation speed. Use the Array Size slider (10–120) to set how many bars to sort. The array regenerates automatically when you change the size.' },
-              { step: '03', title: 'Execute the Sort', desc: 'Click the "▶ Execute" button to start the visualization. The bars will animate in real-time showing each comparison and swap. You can click "■ Halt" at any time to pause.' },
-              { step: '04', title: 'Observe the Output', desc: 'Watch the bar colors change as the algorithm runs. The terminal log at the bottom shows execution status. Stats (comparisons and swaps) update live.' },
-              { step: '05', title: 'Reset & Repeat', desc: 'Click "↻ Reset" to generate a new random array and try again with a different algorithm or parameters.' },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-4 p-4 bg-card border border-border rounded-lg">
-                <div className="text-primary font-bold text-lg opacity-40">{item.step}</div>
-                <div>
-                  <div className="text-sm font-semibold mb-1">{item.title}</div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Output Guide */}
-        <section>
-          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 05. reading the output</div>
-          <h3 className="text-xl font-bold mb-4">What the Output Means</h3>
-
-          <div className="mb-6">
-            <h4 className="text-sm font-semibold mb-3">Bar Colors</h4>
-            <div className="space-y-2">
-              {outputGuide.map((item) => (
-                <div key={item.label} className="flex items-start gap-3 p-3 bg-card border border-border rounded-lg">
-                  <span className={`w-4 h-4 rounded-sm mt-0.5 shrink-0 ${item.color}`} />
-                  <div>
-                    <div className="text-sm font-semibold">{item.label}</div>
-                    <p className="text-xs text-muted-foreground">{item.meaning}</p>
-                  </div>
-                </div>
-              ))}
             </div>
-          </div>
 
-          <div className="mb-6">
-            <h4 className="text-sm font-semibold mb-3">Bar Height</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed p-3 bg-card border border-border rounded-lg">
-              Each bar's height represents the numeric value of that array element. Taller bars = larger numbers. The goal of sorting is to arrange all bars from shortest (left) to tallest (right).
-            </p>
-          </div>
-
-          <div className="mb-6">
-            <h4 className="text-sm font-semibold mb-3">Statistics Panel</h4>
-            <div className="grid sm:grid-cols-2 gap-2">
-              <div className="p-3 bg-card border border-border rounded-lg">
-                <span className="text-sm font-semibold text-bar-comparing">Comparisons</span>
-                <p className="text-xs text-muted-foreground mt-1">How many times the algorithm checked whether one element is greater or less than another. More comparisons = slower algorithm.</p>
+            {/* Right column — bar height, stats, terminal */}
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider text-muted-foreground">Bar Height</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed p-4 bg-card border border-border rounded-lg">
+                  Each bar's height represents the numeric value of that array element. Taller bars = larger numbers. The goal of sorting is to arrange all bars from shortest (left) to tallest (right).
+                </p>
               </div>
-              <div className="p-3 bg-card border border-border rounded-lg">
-                <span className="text-sm font-semibold text-bar-swapping">Swaps</span>
-                <p className="text-xs text-muted-foreground mt-1">How many times the algorithm moved elements to different positions. Each swap is an expensive memory operation in real systems.</p>
+
+              <div>
+                <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider text-muted-foreground">Statistics Panel</h4>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="p-4 bg-card border border-border rounded-lg">
+                    <span className="text-sm font-semibold text-bar-comparing">Comparisons</span>
+                    <p className="text-sm text-muted-foreground mt-2">How many times the algorithm checked whether one element is greater or less than another. More comparisons = slower algorithm.</p>
+                  </div>
+                  <div className="p-4 bg-card border border-border rounded-lg">
+                    <span className="text-sm font-semibold text-bar-swapping">Swaps</span>
+                    <p className="text-sm text-muted-foreground mt-2">How many times the algorithm moved elements to different positions. Each swap is an expensive memory operation in real systems.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold mb-4 uppercase tracking-wider text-muted-foreground">Terminal Log</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed p-4 bg-card border border-border rounded-lg">
+                  The terminal-style output at the bottom of the visualizer shows system status messages. It displays when the WASM module initializes, which algorithm is executing, and final statistics after completion.
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div>
-            <h4 className="text-sm font-semibold mb-3">Terminal Log</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed p-3 bg-card border border-border rounded-lg">
-              The terminal-style output at the bottom of the visualizer shows system status messages. It displays when the WASM module initializes, which algorithm is executing, and final statistics after completion. This simulates the kind of logging you'd see from a real WebAssembly runtime.
-            </p>
+      {/* Project file structure */}
+      <section className="px-6 py-20 lg:py-24 bg-card/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-2">
+              <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 06. project structure</div>
+              <h3 className="text-2xl lg:text-3xl font-bold mb-4">Project Structure</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                A clean separation of concerns: WASM bridge for performance-critical sorting, React components for the UI, and custom hooks for state management.
+              </p>
+            </div>
+            <div className="lg:col-span-3">
+              <div className="p-6 bg-card border border-border rounded-lg text-sm font-mono space-y-1.5">
+                <div className="text-muted-foreground">src/</div>
+                <div className="pl-4"><span className="text-primary">wasm/</span></div>
+                <div className="pl-8"><span className="text-accent">WasmBridge.ts</span> <span className="text-muted-foreground">— WASM module loader & JS bridge</span></div>
+                <div className="pl-8"><span className="text-accent">cpp/sorting_module.cpp.ts</span> <span className="text-muted-foreground">— C++ source reference</span></div>
+                <div className="pl-4"><span className="text-primary">components/</span></div>
+                <div className="pl-8"><span className="text-accent">BarChart.tsx</span> <span className="text-muted-foreground">— Animated bar visualization</span></div>
+                <div className="pl-8"><span className="text-accent">ControlPanel.tsx</span> <span className="text-muted-foreground">— Algorithm & parameter controls</span></div>
+                <div className="pl-4"><span className="text-primary">hooks/</span></div>
+                <div className="pl-8"><span className="text-accent">useSortingEngine.ts</span> <span className="text-muted-foreground">— Sorting state machine & animation loop</span></div>
+                <div className="pl-4"><span className="text-primary">pages/</span></div>
+                <div className="pl-8"><span className="text-accent">Index.tsx</span> <span className="text-muted-foreground">— This documentation page</span></div>
+                <div className="pl-8"><span className="text-accent">Visualizer.tsx</span> <span className="text-muted-foreground">— Interactive visualizer</span></div>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Architecture Details */}
-        <section>
-          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">// 06. project structure</div>
-          <h3 className="text-xl font-bold mb-4">Project Structure</h3>
-          <div className="p-4 bg-card border border-border rounded-lg text-xs font-mono space-y-1">
-            <div className="text-muted-foreground">src/</div>
-            <div className="pl-4"><span className="text-primary">wasm/</span></div>
-            <div className="pl-8"><span className="text-accent">WasmBridge.ts</span> <span className="text-muted-foreground">— WASM module loader & JS bridge</span></div>
-            <div className="pl-8"><span className="text-accent">cpp/sorting_module.cpp.ts</span> <span className="text-muted-foreground">— C++ source reference</span></div>
-            <div className="pl-4"><span className="text-primary">components/</span></div>
-            <div className="pl-8"><span className="text-accent">BarChart.tsx</span> <span className="text-muted-foreground">— Animated bar visualization</span></div>
-            <div className="pl-8"><span className="text-accent">ControlPanel.tsx</span> <span className="text-muted-foreground">— Algorithm & parameter controls</span></div>
-            <div className="pl-4"><span className="text-primary">hooks/</span></div>
-            <div className="pl-8"><span className="text-accent">useSortingEngine.ts</span> <span className="text-muted-foreground">— Sorting state machine & animation loop</span></div>
-            <div className="pl-4"><span className="text-primary">pages/</span></div>
-            <div className="pl-8"><span className="text-accent">Index.tsx</span> <span className="text-muted-foreground">— This documentation page</span></div>
-            <div className="pl-8"><span className="text-accent">Visualizer.tsx</span> <span className="text-muted-foreground">— Interactive visualizer</span></div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="text-center py-8">
+      {/* Call to action */}
+      <section className="px-6 py-24 lg:py-32 text-center">
+        <div className="max-w-7xl mx-auto">
           <Link
             to="/visualizer"
-            className="inline-block px-8 py-4 rounded bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity glow-border glow-box"
+            className="inline-block px-10 py-5 rounded bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity glow-border glow-box"
           >
             ▶ Launch the Visualizer
           </Link>
-          <p className="text-xs text-muted-foreground mt-4">No installation required — runs entirely in your browser.</p>
-        </section>
-      </div>
+          <p className="text-sm text-muted-foreground mt-6">No installation required — runs entirely in your browser.</p>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 };
