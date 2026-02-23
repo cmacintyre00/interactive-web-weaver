@@ -1,3 +1,6 @@
+// Code written by Connor MacIntyre
+// Sidebar panel with algorithm selection, speed/size sliders, run controls, and live stats.
+
 import { ALGORITHMS, type AlgorithmId } from '@/wasm/WasmBridge';
 
 interface ControlPanelProps {
@@ -28,7 +31,7 @@ export function ControlPanel({
 
   return (
     <div className="space-y-5">
-      {/* Algorithm Selection */}
+      {/* Algorithm picker */}
       <div>
         <label className="block text-xs text-muted-foreground mb-2 uppercase tracking-widest">
           // algorithm
@@ -53,7 +56,7 @@ export function ControlPanel({
         </div>
       </div>
 
-      {/* Algorithm Info */}
+      {/* Selected algorithm info card */}
       <div className="p-3 bg-secondary/30 rounded border border-border text-xs space-y-1">
         <p className="text-muted-foreground">{currentAlgo.description}</p>
         <div className="flex gap-4 pt-1">
@@ -62,7 +65,7 @@ export function ControlPanel({
         </div>
       </div>
 
-      {/* Speed Slider */}
+      {/* Speed slider */}
       <div>
         <label className="block text-xs text-muted-foreground mb-2 uppercase tracking-widest">
           // speed: {speed}%
@@ -77,7 +80,7 @@ export function ControlPanel({
         />
       </div>
 
-      {/* Array Size Slider */}
+      {/* Array size slider */}
       <div>
         <label className="block text-xs text-muted-foreground mb-2 uppercase tracking-widest">
           // array size: {arraySize}
@@ -93,7 +96,7 @@ export function ControlPanel({
         />
       </div>
 
-      {/* Controls */}
+      {/* Run, halt, and reset buttons */}
       <div className="flex gap-2">
         {!isRunning ? (
           <button
@@ -119,7 +122,7 @@ export function ControlPanel({
         </button>
       </div>
 
-      {/* Stats */}
+      {/* Live comparison and swap counters */}
       <div className="grid grid-cols-2 gap-2">
         <div className="p-3 bg-secondary/30 rounded border border-border">
           <div className="text-xs text-muted-foreground uppercase tracking-widest">Comparisons</div>
@@ -131,7 +134,7 @@ export function ControlPanel({
         </div>
       </div>
 
-      {/* Legend */}
+      {/* Color legend for bar states */}
       <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-bar" /> Default</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-bar-comparing" /> Comparing</span>

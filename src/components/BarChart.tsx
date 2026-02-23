@@ -1,3 +1,6 @@
+// Code written by Connor MacIntyre
+// Renders each array element as a colored bar, showing comparison/swap/sorted states in real time.
+
 import type { SortStep } from '@/wasm/WasmBridge';
 
 interface BarChartProps {

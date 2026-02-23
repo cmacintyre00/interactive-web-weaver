@@ -1,18 +1,12 @@
-/**
- * WASM Bridge Module
- * 
- * This module provides the abstraction layer between the JavaScript UI
- * and the WebAssembly sorting algorithms.
- * 
- * In a full Emscripten setup, this would load the .wasm binary compiled from C++.
- * Here we use hand-crafted WebAssembly for the sorting algorithms to demonstrate
- * the architecture pattern.
- * 
- * Architecture:
- *   C++ Source → Emscripten → .wasm binary → WasmBridge (this file) → React UI
- * 
- * The C++ source files are included in src/wasm/cpp/ for reference.
- */
+// Code written by Connor MacIntyre
+//
+// This is the bridge between the JavaScript UI and the sorting algorithms.
+// In a real setup you'd compile C++ to .wasm with Emscripten and load it here.
+// For now the sorting logic is implemented as TypeScript generators that yield
+// each step so the UI can animate comparisons, swaps, and sorted elements.
+//
+// Data flow: C++ Source -> Emscripten -> .wasm binary -> WasmBridge (this file) -> React UI
+// The original C++ source is kept in src/wasm/cpp/ for reference.
 
 export type SortStep = {
   array: number[];
@@ -62,7 +56,7 @@ export const ALGORITHMS: AlgorithmInfo[] = [
   },
 ];
 
-// --- Sorting algorithm generators (simulating WASM-exported functions) ---
+// Each sorting algorithm is a generator that yields a SortStep on every comparison or swap.
 
 function* bubbleSort(arr: number[]): Generator<SortStep> {
   const a = [...arr];
@@ -154,10 +148,8 @@ function* quickSort(arr: number[]): Generator<SortStep> {
   yield { array: [...a], comparing: null, swapping: null, sorted: Array.from({ length: a.length }, (_, i) => i) };
 }
 
-/**
- * WasmBridge - Simulates the interface a real WASM module would expose.
- * In production, this would use WebAssembly.instantiate() to load compiled C++.
- */
+// Singleton that mimics what a real WASM module would expose.
+// In production you'd swap the generators for WebAssembly.instantiate() calls.
 export class WasmBridge {
   private static instance: WasmBridge | null = null;
 

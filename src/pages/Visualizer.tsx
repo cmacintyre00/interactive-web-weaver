@@ -1,6 +1,9 @@
+// Code written by Connor MacIntyre
+
 import { Link } from 'react-router-dom';
 import { BarChart } from '@/components/BarChart';
 import { ControlPanel } from '@/components/ControlPanel';
+import Footer from '@/components/Footer';
 import { useSortingEngine } from '@/hooks/useSortingEngine';
 
 const Visualizer = () => {
@@ -8,7 +11,7 @@ const Visualizer = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Header */}
+      {/* Header with logo and pipeline label */}
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse-glow" />
@@ -21,9 +24,9 @@ const Visualizer = () => {
         <span className="text-xs text-muted-foreground hidden sm:block">C++ → WebAssembly → Browser</span>
       </header>
 
-      {/* Main Content */}
+      {/* Main layout: visualization on left, controls on right */}
       <div className="flex-1 flex flex-col lg:flex-row">
-        {/* Visualization Area */}
+        {/* Bar chart visualization area */}
         <main className="flex-1 p-6 flex flex-col">
           <div className="flex-1 bg-card border border-border rounded-lg p-4 flex flex-col glow-box">
             <div className="flex items-center justify-between mb-4">
@@ -39,7 +42,7 @@ const Visualizer = () => {
             </div>
           </div>
 
-          {/* Terminal-style log */}
+          {/* Terminal-style status log */}
           <div className="mt-4 p-3 bg-card border border-border rounded text-xs text-muted-foreground font-mono scanline">
             <span className="text-primary">$</span> wasm_bridge.init() → module loaded
             <br />
@@ -53,7 +56,7 @@ const Visualizer = () => {
           </div>
         </main>
 
-        {/* Sidebar Controls */}
+        {/* Sidebar with algorithm controls and stats */}
         <aside className="lg:w-80 border-t lg:border-t-0 lg:border-l border-border p-6">
           <div className="text-xs text-muted-foreground uppercase tracking-widest mb-4">
             // control panel
@@ -78,6 +81,8 @@ const Visualizer = () => {
           />
         </aside>
       </div>
+
+      <Footer />
     </div>
   );
 };
