@@ -62,7 +62,7 @@ const algorithms = [
 const outputGuide = [
   {
     color: 'bg-bar',
-    label: 'Default (Teal)',
+    label: 'Default (Grey)',
     meaning: 'Unsorted element sitting in the array waiting to be processed.',
   },
   {
