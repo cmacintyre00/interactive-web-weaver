@@ -17,7 +17,19 @@ export function useSortingEngine() {
   const [swaps, setSwaps] = useState(0);
 
   const cancelRef = useRef(false);
+  const timerRef = useRef<number | null>(null);
   const bridge = useRef(WasmBridge.getInstance());
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cancelRef.current = true;
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, []);
 
   const generateNewArray = useCallback(() => {
     const newArr = bridge.current.generateArray(arraySize);
@@ -43,8 +55,15 @@ export function useSortingEngine() {
     let compCount = 0;
     let swapCount = 0;
 
-    for (const step of gen) {
-      if (cancelRef.current) break;
+    const runStep = () => {
+      if (cancelRef.current) return;
+      const result = gen.next();
+      if (result.done) {
+        setIsRunning(false);
+        if (!cancelRef.current) setIsSorted(true);
+        return;
+      }
+      const step = result.value;
       if (step.comparing) compCount++;
       if (step.swapping) swapCount++;
       setComparisons(compCount);
@@ -53,20 +72,27 @@ export function useSortingEngine() {
       setArray(step.array);
 
       const delay = Math.max(1, 200 - speed * 2);
-      await new Promise(r => setTimeout(r, delay));
-    }
+      timerRef.current = window.setTimeout(runStep, delay);
+    };
 
-    setIsRunning(false);
-    if (!cancelRef.current) setIsSorted(true);
+    runStep();
   }, [isRunning, isSorted, algorithm, array, speed]);
 
   const stopSort = useCallback(() => {
     cancelRef.current = true;
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
     setIsRunning(false);
   }, []);
 
   const reset = useCallback(() => {
     cancelRef.current = true;
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
     setIsRunning(false);
     generateNewArray();
   }, [generateNewArray]);

@@ -12,7 +12,7 @@ export type SortStep = {
   array: number[];
   comparing: [number, number] | null;
   swapping: [number, number] | null;
-  sorted: number[];
+  sorted: readonly number[];
 };
 
 export type AlgorithmId = 'bubble' | 'selection' | 'quick' | 'insertion';
@@ -63,10 +63,10 @@ function* bubbleSort(arr: number[]): Generator<SortStep> {
   const sorted: number[] = [];
   for (let i = a.length - 1; i > 0; i--) {
     for (let j = 0; j < i; j++) {
-      yield { array: [...a], comparing: [j, j + 1], swapping: null, sorted: [...sorted] };
+      yield { array: [...a], comparing: [j, j + 1], swapping: null, sorted };
       if (a[j] > a[j + 1]) {
         [a[j], a[j + 1]] = [a[j + 1], a[j]];
-        yield { array: [...a], comparing: null, swapping: [j, j + 1], sorted: [...sorted] };
+        yield { array: [...a], comparing: null, swapping: [j, j + 1], sorted };
       }
     }
     sorted.push(i);
@@ -81,12 +81,12 @@ function* selectionSort(arr: number[]): Generator<SortStep> {
   for (let i = 0; i < a.length; i++) {
     let minIdx = i;
     for (let j = i + 1; j < a.length; j++) {
-      yield { array: [...a], comparing: [minIdx, j], swapping: null, sorted: [...sorted] };
+      yield { array: [...a], comparing: [minIdx, j], swapping: null, sorted };
       if (a[j] < a[minIdx]) minIdx = j;
     }
     if (minIdx !== i) {
       [a[i], a[minIdx]] = [a[minIdx], a[i]];
-      yield { array: [...a], comparing: null, swapping: [i, minIdx], sorted: [...sorted] };
+      yield { array: [...a], comparing: null, swapping: [i, minIdx], sorted };
     }
     sorted.push(i);
   }
@@ -99,10 +99,10 @@ function* insertionSort(arr: number[]): Generator<SortStep> {
   for (let i = 1; i < a.length; i++) {
     let j = i;
     while (j > 0) {
-      yield { array: [...a], comparing: [j - 1, j], swapping: null, sorted: [...sorted] };
+      yield { array: [...a], comparing: [j - 1, j], swapping: null, sorted };
       if (a[j - 1] > a[j]) {
         [a[j - 1], a[j]] = [a[j], a[j - 1]];
-        yield { array: [...a], comparing: null, swapping: [j - 1, j], sorted: [...sorted] };
+        yield { array: [...a], comparing: null, swapping: [j - 1, j], sorted };
         j--;
       } else {
         break;
@@ -121,15 +121,15 @@ function* quickSort(arr: number[]): Generator<SortStep> {
     const pivot = a[hi];
     let i = lo;
     for (let j = lo; j < hi; j++) {
-      yield { array: [...a], comparing: [j, hi], swapping: null, sorted: [...sorted] };
+      yield { array: [...a], comparing: [j, hi], swapping: null, sorted };
       if (a[j] < pivot) {
         [a[i], a[j]] = [a[j], a[i]];
-        yield { array: [...a], comparing: null, swapping: [i, j], sorted: [...sorted] };
+        yield { array: [...a], comparing: null, swapping: [i, j], sorted };
         i++;
       }
     }
     [a[i], a[hi]] = [a[hi], a[i]];
-    yield { array: [...a], comparing: null, swapping: [i, hi], sorted: [...sorted] };
+    yield { array: [...a], comparing: null, swapping: [i, hi], sorted };
     sorted.push(i);
     return i;
   }
