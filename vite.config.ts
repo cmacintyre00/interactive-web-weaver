@@ -18,4 +18,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: ["@radix-ui/react-toast", "@radix-ui/react-tooltip", "lucide-react"],
+        },
+      },
+    },
+  },
 });
